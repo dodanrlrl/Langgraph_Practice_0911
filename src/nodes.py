@@ -1,6 +1,7 @@
 from src.state import RagState
 from src.tools.rag_tool import rag_search_google_document
 from langchain.agents import create_agent
+from deepagents import create_deep_agent
 
 
 prompt = """너는 기업 분석 및 금융/기술 정보 전문 AI 에이전트이다.
@@ -22,7 +23,7 @@ prompt = """너는 기업 분석 및 금융/기술 정보 전문 AI 에이전트
    - 정보 출처(예: Alphabet FY2026 10-K, 최신 웹 검색 등)를 답변에 명시하라.
 """
 
-agent = create_agent(
+deep_agent = create_deep_agent(
   model='openai:gpt-4.1-mini',
   tools=[rag_search_google_document],
   system_prompt=prompt,
@@ -30,12 +31,11 @@ agent = create_agent(
 
 def use_rag_data(state : RagState):
 
-  answer = agent.invoke(
+  answer = deep_agent.invoke(
   # 1번인자 : 메세지
   {
       'messages': state['messages'][-1]
-  }
-    
+  } 
   )
 
   return{'messages': answer}
